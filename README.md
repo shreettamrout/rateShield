@@ -98,20 +98,22 @@ clientApiLimit.setLastRequestTimeStamp(currentTimestamp);
   "apiName": "getUsers",
   "methodName": "GET"
 }
+```
 Response
 
-json
+```json
 Copy
 Edit
 {
   "status": "SUCCESS"
 }
+```
 2. Add / Update Client Configuration
 POST /ratelimiter/configure-client
 
 Request
 
-json
+```json
 Copy
 Edit
 {
@@ -143,6 +145,7 @@ Edit
     }
   ]
 }
+```
 3. Get Client Rate-Limiting Status
 GET /ratelimiter/client-limits
 
@@ -156,7 +159,7 @@ DELETE /ratelimiter/delete-limits
 
 Request
 
-json
+```json
 Copy
 Edit
 {
@@ -164,24 +167,26 @@ Edit
   "limitType": "API",
   "limitName": "/web/test"
 }
+```
 6. Delete Client and Its Configuration
 DELETE /ratelimiter/delete-client
 
 Request
 
-json
+```json
 Copy
 Edit
 {
   "clientId": "client123"
 }
+```
 🧱 Redis Structure
 🔑 Rate Limit Keys
 Format:
 rate-limit:{clientId}:{limitType}:{limitName}
 
 📦 Value Structure
-json
+```json
 Copy
 Edit
 {
@@ -190,6 +195,7 @@ Edit
   "lastRequestTimeStamp": 1690977600000,
   "timeUnit": "MIN"
 }
+```
 🔐 Lock Key
 Format:
 lock:{clientId}
