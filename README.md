@@ -86,8 +86,112 @@ updatedAvailablePermits--;
 clientApiLimit.setAvailablePermits(updatedAvailablePermits);
 clientApiLimit.setLastRequestTimeStamp(currentTimestamp);
 ```
-### 🧭 Flow Diagram: Token Bucket Rate-Limiting Process
+## 📡 Supported APIs
 
-![Token Bucket Flow](./assets/token-bucket-flowchart.png)
+### 1. Verify API Request Limit
+
+- **POST** `/ratelimiter/verify-api-limit`
+- **Request**
+```json
+{
+  "clientId": "client123",
+  "apiName": "getUsers",
+  "methodName": "GET"
+}
+Response
+
+json
+Copy
+Edit
+{
+  "status": "SUCCESS"
+}
+2. Add / Update Client Configuration
+POST /ratelimiter/configure-client
+
+Request
+
+json
+Copy
+Edit
+{
+  "clientId": "client123",
+  "limits": [
+    {
+      "limitType": "DEFAULT",
+      "limitName": "GLOBAL",
+      "timeIntervalLimit": {
+        "timeUnit": "SEC",
+        "maxRequests": 2
+      }
+    },
+    {
+      "limitType": "API",
+      "limitName": "/web/test",
+      "timeIntervalLimit": {
+        "timeUnit": "HOUR",
+        "maxRequests": 60
+      }
+    },
+    {
+      "limitType": "METHOD",
+      "limitName": "PUT",
+      "timeIntervalLimit": {
+        "timeUnit": "MIN",
+        "maxRequests": 10
+      }
+    }
+  ]
+}
+3. Get Client Rate-Limiting Status
+GET /ratelimiter/client-limits
+
+Query Parameter: clientId=client123
+
+4. Get All Configured Rate Limits
+GET /ratelimiter/configured-limits
+
+5. Delete Specific Rate Limits
+DELETE /ratelimiter/delete-limits
+
+Request
+
+json
+Copy
+Edit
+{
+  "clientId": "client123",
+  "limitType": "API",
+  "limitName": "/web/test"
+}
+6. Delete Client and Its Configuration
+DELETE /ratelimiter/delete-client
+
+Request
+
+json
+Copy
+Edit
+{
+  "clientId": "client123"
+}
+🧱 Redis Structure
+🔑 Rate Limit Keys
+Format:
+rate-limit:{clientId}:{limitType}:{limitName}
+
+📦 Value Structure
+json
+Copy
+Edit
+{
+  "availablePermits": 4,
+  "maxPermits": 10,
+  "lastRequestTimeStamp": 1690977600000,
+  "timeUnit": "MIN"
+}
+🔐 Lock Key
+Format:
+lock:{clientId}
 
 
