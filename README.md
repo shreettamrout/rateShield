@@ -102,8 +102,6 @@ clientApiLimit.setLastRequestTimeStamp(currentTimestamp);
 Response
 
 ```json
-Copy
-Edit
 {
   "status": "SUCCESS"
 }
@@ -114,8 +112,6 @@ POST /ratelimiter/configure-client
 Request
 
 ```json
-Copy
-Edit
 {
   "clientId": "client123",
   "limits": [
@@ -160,8 +156,6 @@ DELETE /ratelimiter/delete-limits
 Request
 
 ```json
-Copy
-Edit
 {
   "clientId": "client123",
   "limitType": "API",
@@ -174,8 +168,6 @@ DELETE /ratelimiter/delete-client
 Request
 
 ```json
-Copy
-Edit
 {
   "clientId": "client123"
 }
@@ -187,8 +179,6 @@ rate-limit:{clientId}:{limitType}:{limitName}
 
 📦 Value Structure
 ```json
-Copy
-Edit
 {
   "availablePermits": 4,
   "maxPermits": 10,
