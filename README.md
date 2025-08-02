@@ -83,3 +83,15 @@ if (availableTokens < 1) {
 
 availableTokens -= 1;
 updateRedis(clientId, availableTokens, now);
+
+###🔐 Concurrency Handling
+Concurrency is handled using RedisLock (RLock) to ensure that only one thread/process modifies a client's token state at a time.
+
+Locking Strategy:
+Each client has a lock key: lock:{clientId}
+
+Before modifying token state, the lock is acquired.
+
+Other threads wait for the lock (or timeout).
+
+Lock is released after the update.
