@@ -71,17 +71,23 @@ The Token Bucket Algorithm allows requests at a fixed rate while allowing short 
 
 ### Logic (Pseudocode):
 ```java
-long elapsedMillis = now - lastRequestTime;
-double unitsPassed = convertToTimeUnits(elapsedMillis);
-long newTokens = unitsPassed * maxPermits;
+long elapsedTimeMillis = currentTimestamp - clientApiLimit.getLastRequestTimeStamp();
+double elapsedTimeUnits = TimeUnitConversionUtil.convert(elapsedTimeMillis, clientApiLimit.getTimeUnit());
+long updatedAvailablePermits = (long) Math.min(
+    clientApiLimit.getAvailablePermits() + elapsedTimeUnits * clientApiLimit.getMaxPermits(),
+    clientApiLimit.getMaxPermits()
+);
 
-availableTokens = min(availableTokens + newTokens, maxPermits);
-
-if (availableTokens < 1) {
-    return RATE_LIMIT_EXCEEDED;
+if (updatedAvailablePermits < 1) {
+    return new BaseResponse(Status.FAILURE, "Rate limit exceeded");
 }
 
-availableTokens -= 1;
-updateRedis(clientId, availableTokens, now);
+updatedAvailablePermits--;
+clientApiLimit.setAvailablePermits(updatedAvailablePermits);
+clientApiLimit.setLastRequestTimeStamp(currentTimestamp);
+```
+### 🧭 Flow Diagram: Token Bucket Rate-Limiting Process
+
+![Token Bucket Flow](./assets/token-bucket-flowchart.png)
 
 
