@@ -83,15 +83,5 @@ if (availableTokens < 1) {
 
 availableTokens -= 1;
 updateRedis(clientId, availableTokens, now);
-` ``` `
-🔐 Concurrency Control with RedisLock
-To prevent inconsistent token updates during high-concurrency loads:
 
-A Redis-based lock (RLock) is acquired before any rate-limiting logic is executed.
-
-Lock Key: lock:{clientId}
-
-All critical sections (token checks/updates) are protected.
-
-Lock is released after the operation completes.
 
